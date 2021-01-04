@@ -6,6 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from website_scrape_config import WebsiteScrapeConfig
 
 amiami_config = WebsiteScrapeConfig(
+    name="Hatsune Miku Bishoujo Preorders",
     url='https://www.amiami.com/eng/search/list/?s_keywords=Hatsune%20Miku&' +
     's_st_list_preorder_available=1&s_cate_tag=14',
     wait_for_class='new-items',
@@ -20,7 +21,7 @@ driver = webdriver.Firefox(options=firefox_options,
 
 
 def scrape(scrape_config):
-    print(f'Scraping {scrape_config.url}')
+    print(f'Scraping {scrape_config.name}')
     driver.get(scrape_config.url)
     print(f'Waiting for {scrape_config.wait_for_class} to appear...')
     WebDriverWait(driver, 30).until(EC.presence_of_element_located(
