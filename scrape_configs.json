@@ -1,0 +1,10 @@
+[
+    {
+        "name": "Amiami Hatsune Miku Figure Preorders",
+        "urls": [
+            "https://www.amiami.com/eng/search/list/?s_keywords=Hatsune%20Miku&s_st_list_preorder_available=1&s_cate_tag=14",
+            "https://www.amiami.com/eng/search/list/?s_keywords=Hatsune%20Miku&s_st_list_preorder_available=1&s_cate_tag=36"],
+        "wait_for_class": "new-items",
+        "item_class": "newly-added-items__item"
+    }
+]
