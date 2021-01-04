@@ -7,13 +7,14 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class SeleniumScraper:
 
-    def __init__(self, headless, js_enabled):
+    def __init__(self, headless, js_enabled, timeout_secs):
         firefox_options = webdriver.FirefoxOptions()
         firefox_options.headless = headless
         firefox_profile = webdriver.FirefoxProfile()
         firefox_profile.set_preference("javascript.enabled", js_enabled)
         self.driver = webdriver.Firefox(options=firefox_options,
                                         firefox_profile=firefox_profile)
+        self.timeout_secs = timeout_secs
 
     def scrape_and_screenshot_urls(self, scrape_config):
         url_to_screenshots_map = defaultdict(lambda: [])
@@ -25,7 +26,7 @@ class SeleniumScraper:
             wait_for_class = scrape_config.wait_for_class
             if wait_for_class is None:
                 scrape_config.item_class
-            WebDriverWait(self.driver, 30).until(EC.presence_of_element_located(
+            WebDriverWait(self.driver, self.timeout_secs).until(EC.presence_of_element_located(
                 (By.CLASS_NAME, scrape_config.wait_for_class)))
             items = self.driver.find_elements_by_class_name(
                 scrape_config.item_class)
