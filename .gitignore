@@ -1,4 +1,5 @@
 screenshots/*
+!screenshots/README.md
 geckodriver.log
 
 # Byte-compiled / optimized / DLL files

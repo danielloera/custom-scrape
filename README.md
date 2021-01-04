@@ -1,2 +1,2 @@
 # scrape-notify
-Modular notifying web scraper for item listings. 
+Modular notifying web scraper for item listings.
