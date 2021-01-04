@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class SeleniumScraper:
 
-    def __init__(self, headless=True, js_enabled=True):
+    def __init__(self, headless, js_enabled):
         firefox_options = webdriver.FirefoxOptions()
         firefox_options.headless = headless
         firefox_profile = webdriver.FirefoxProfile()
