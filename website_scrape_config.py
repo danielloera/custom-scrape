@@ -1,6 +1,3 @@
-import re
-
-
 class WebsiteScrapeConfig:
 
     def __init__(self, name=None, urls=None, wait_for_class=None, item_class=None):
