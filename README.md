@@ -5,7 +5,7 @@ Modular/custom web scraper for screenshotting item listings using a json config.
 By default running:
 
 ```sh
-python custom_scrape.py
+python custom_scrape.python
 ```
 will scrape the sites defined in `scrape_configs.json` and save the found items in the `screenshots` folder.
 
@@ -18,7 +18,6 @@ will scrape the sites defined in `scrape_configs.json` and save the found items 
         "item_class": "item",
         "wait_for_class": "item-list"
     }
-    ... other websites
 ]
 ```
 `name`: Name of the site(s) you are scraping.
