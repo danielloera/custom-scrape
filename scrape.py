@@ -1,4 +1,3 @@
-from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -19,7 +18,6 @@ firefox_profile.set_preference("javascript.enabled", True)
 driver = webdriver.Firefox(options=firefox_options,
                            firefox_profile=firefox_profile)
 
-
 def scrape(scrape_config):
     print(f'Scraping {scrape_config.name}')
     driver.get(scrape_config.url)
@@ -32,6 +30,5 @@ def scrape(scrape_config):
         item.screenshot(f'screenshots/{item.text}.png')
     print('done.')
     driver.quit()
-
 
 scrape(amiami_config)
