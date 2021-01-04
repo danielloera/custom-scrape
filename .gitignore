@@ -1,3 +1,4 @@
+# scrape-notify
 screenshots/*
 !screenshots/README.md
 geckodriver.log
