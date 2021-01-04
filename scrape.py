@@ -20,15 +20,17 @@ driver = webdriver.Firefox(options=firefox_options,
 
 def scrape(scrape_config):
     print(f'Scraping {scrape_config.name}')
-    driver.get(scrape_config.url)
-    print(f'Waiting for {scrape_config.wait_for_class} to appear...')
-    WebDriverWait(driver, 30).until(EC.presence_of_element_located(
-        (By.CLASS_NAME, scrape_config.wait_for_class)))
-    items = driver.find_elements_by_class_name(scrape_config.item_class)
-    for item in items:
-        print('FOUND:', item.text, '\n\n')
-        item.screenshot(f'screenshots/{item.text}.png')
-    print('done.')
+    for i, url in enumerate(scrape_config.urls):
+        print(f'Loading url {i + 1}: {url}')
+        driver.get(url)
+        print(f'Waiting for {scrape_config.wait_for_class} to appear...')
+        WebDriverWait(driver, 30).until(EC.presence_of_element_located(
+            (By.CLASS_NAME, scrape_config.wait_for_class)))
+        items = driver.find_elements_by_class_name(scrape_config.item_class)
+        for item in items:
+            print('FOUND:', item.text, '\n\n')
+            item.screenshot(f'screenshots/{item.text}.png')
+        print('done.')
     driver.quit()
 
 scrape(amiami_config)
