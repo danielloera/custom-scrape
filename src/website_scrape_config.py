@@ -3,7 +3,7 @@ import json
 
 class WebsiteScrapeConfig:
 
-    def __init__(self, name=None, urls=None, wait_for_class=None, item_class=None):
+    def __init__(self, name, urls, wait_for_class, item_class):
         self.name = name
         self.urls = urls
         self.wait_for_class = wait_for_class
