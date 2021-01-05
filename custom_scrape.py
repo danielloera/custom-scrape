@@ -17,13 +17,16 @@ parser.set_defaults(js_enabled=True)
 parser.add_argument('--timeout_secs', type=int, default=30,
                     help='Seconds to wait while waiting for pages to load.')
 parser.add_argument('--discord_notification_channel', default=None,
-                    help='The discord text channel name to send results to. Requires the DISCORD_TOKEN environment variable to be set.')
+                    help='''The discord text channel name to send results to.
+                    Requires the DISCORD_TOKEN environment variable to be set.
+                    ''')
 
 if __name__ == '__main__':
     args = parser.parse_args()
     configs = WebsiteScrapeConfig.listFromFile(args.config_file)
-    scraper = SeleniumScraper(
-        headless=args.headless, js_enabled=args.js_enabled, timeout_secs=args.timeout_secs)
+    scraper = SeleniumScraper(headless=args.headless,
+                              js_enabled=args.js_enabled,
+                              timeout_secs=args.timeout_secs)
     results = []
 
     for config in configs:
