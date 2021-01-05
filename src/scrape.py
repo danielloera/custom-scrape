@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from urllib3.exceptions import MaxRetryError
 
 
 class SeleniumScraper:
@@ -21,13 +22,21 @@ class SeleniumScraper:
         print(f'Scraping {scrape_config.name}')
         for url_index, url in enumerate(scrape_config.urls):
             print(f'\nLoading url {url_index + 1}: {url}')
-            self.driver.get(url)
+            try:
+                self.driver.get(url)
+            except MaxRetryError:
+                print(f'Unable to reach: {url}')
+                continue
             print(f'Waiting for {scrape_config.wait_for_class} to appear...')
             wait_for_class = scrape_config.wait_for_class
             if wait_for_class is None:
                 scrape_config.item_class
-            WebDriverWait(self.driver, self.timeout_secs).until(EC.presence_of_element_located(
-                (By.CLASS_NAME, scrape_config.wait_for_class)))
+            try:
+                WebDriverWait(self.driver, self.timeout_secs).until(EC.presence_of_element_located(
+                    (By.CLASS_NAME, scrape_config.wait_for_class)))
+            except:
+                print('Timed out.')
+                continue
             items = self.driver.find_elements_by_class_name(
                 scrape_config.item_class)
             for item_index, item in enumerate(items):
