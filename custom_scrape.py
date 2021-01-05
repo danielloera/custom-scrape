@@ -16,6 +16,8 @@ parser.add_argument('--js_disabled', dest='js_enabled', action='store_false',
 parser.set_defaults(js_enabled=True)
 parser.add_argument('--timeout_secs', type=int, default=30,
                     help='Seconds to wait while waiting for pages to load.')
+parser.add_argument('--discord_notification_channel', default=None,
+                    help='The discord text channel name to send results to. Requires the DISCORD_TOKEN environment variable to be set.')
 
 if __name__ == '__main__':
     args = parser.parse_args()
@@ -26,5 +28,6 @@ if __name__ == '__main__':
     for config in configs:
         url_to_screenshots_map = scraper.scrape_and_screenshot_urls(config)
         results.append(ScrapeResult(config.name, url_to_screenshots_map))
-    send_scrape_result_messages(results)
+    if args.discord_notification_channel is not None:
+        send_scrape_result_messages(results, args.discord_notification_channel)
 
