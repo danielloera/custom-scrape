@@ -30,6 +30,8 @@ This is just to label them in the final output, can be anything.
 ##### Optional
 `wait_for_class`: Needed only if you want to wait on a specific CSS class before scraping. This defaults to `item_class`.
 
+`discord_notification_channel`: The name of the discord text channel to send results to. Requires the `DISCORD_TOKEN` environment variable to be set.
+
 ## Arguments
 Change the config file to use (default is `scrape_configs.json`):
 ```sh

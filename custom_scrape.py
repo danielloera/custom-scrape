@@ -1,4 +1,5 @@
 import argparse
+import os
 from src.discord_notifier import send_scrape_result_messages
 from src.scrape import SeleniumScraper
 from src.scrape_result import ScrapeResult
@@ -25,9 +26,16 @@ if __name__ == '__main__':
     scraper = SeleniumScraper(
         headless=args.headless, js_enabled=args.js_enabled, timeout_secs=args.timeout_secs)
     results = []
+
     for config in configs:
         url_to_screenshots_map = scraper.scrape_and_screenshot_urls(config)
         results.append(ScrapeResult(config.name, url_to_screenshots_map))
+
     if args.discord_notification_channel is not None:
         send_scrape_result_messages(results, args.discord_notification_channel)
-
+    else:
+        # Delete all screenshot files.
+        for result in results:
+            for screenshots in result.url_to_screenshots_map.values():
+                for screenshot in screenshots:
+                    os.remove(screenshot)
