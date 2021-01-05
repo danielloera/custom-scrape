@@ -1,5 +1,7 @@
 import argparse
+from src.discord_notifier import send_scrape_result_messages
 from src.scrape import SeleniumScraper
+from src.scrape_result import ScrapeResult
 from src.website_scrape_config import WebsiteScrapeConfig
 
 # Program arguments
@@ -20,5 +22,9 @@ if __name__ == '__main__':
     configs = WebsiteScrapeConfig.listFromFile(args.config_file)
     scraper = SeleniumScraper(
         headless=args.headless, js_enabled=args.js_enabled, timeout_secs=args.timeout_secs)
+    results = []
     for config in configs:
         url_to_screenshots_map = scraper.scrape_and_screenshot_urls(config)
+        results.append(ScrapeResult(config.name, url_to_screenshots_map))
+    send_scrape_result_messages(results)
+
