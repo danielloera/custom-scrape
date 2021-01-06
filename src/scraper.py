@@ -20,6 +20,7 @@ class SeleniumScraper:
         firefox_profile.set_preference("javascript.enabled", js_enabled)
         self.driver = webdriver.Firefox(options=firefox_options,
                                         firefox_profile=firefox_profile)
+        self.driver.maximize_window()
         self.timeout_secs = timeout_secs
         if not os.path.isdir(screenshots_directory_name):
             os.mkdir(screenshots_directory_name)
