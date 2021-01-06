@@ -30,8 +30,8 @@ if __name__ == '__main__':
     results = []
 
     for config in configs:
-        url_to_screenshots_map = scraper.scrape_and_screenshot_urls(config)
-        results.append(ScrapeResult(config.name, url_to_screenshots_map))
+        scrape_result = scraper.scrape_and_screenshot_urls(config)
+        results.append(scrape_result)
 
     if args.discord_notification_channel is not None:
         send_scrape_result_messages(results, args.discord_notification_channel)

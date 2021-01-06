@@ -56,8 +56,15 @@ class SeleniumScraper:
                 item.screenshot(screenshot_name)
                 self.saved_screenshots.append(screenshot_name)
         self.driver.quit()
-        return url_to_screenshots_map
+        return ScrapeResult(scrape_config.name, url_to_screenshots_map)
 
     def cleanup(self):
         for screenshot in self.saved_screenshots:
             os.remove(screenshot)
+
+
+class ScrapeResult:
+
+    def __init__(self, name, url_to_screenshots_map):
+        self.name = name
+        self.url_to_screenshots_map = url_to_screenshots_map
