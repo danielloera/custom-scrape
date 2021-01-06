@@ -1,7 +1,6 @@
 import argparse
 from src.discord_notifier import send_scrape_result_messages
-from src.scrape import SeleniumScraper
-from src.scrape_result import ScrapeResult
+from src.scraper import SeleniumScraper
 from src.website_scrape_config import WebsiteScrapeConfig
 
 # Program arguments
