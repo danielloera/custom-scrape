@@ -50,8 +50,9 @@ class SeleniumScraper:
                 scrape_config.item_class)
             for item_index, item in enumerate(items):
                 print('FOUND:', item.text, '\n\n')
-                screenshot_name = f'''{screenshots_directory_name}/
-                {scrape_config.name}_{url_index}_{item_index}.png'''
+                screenshot_name = (f'{screenshots_directory_name}/'
+                                   f'{scrape_config.name}_'
+                                   f'{url_index}_{item_index}.png')
                 url_to_screenshots_map[url].append(screenshot_name)
                 item.screenshot(screenshot_name)
                 self.saved_screenshots.append(screenshot_name)

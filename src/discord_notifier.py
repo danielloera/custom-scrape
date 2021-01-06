@@ -26,26 +26,27 @@ def send_scrape_result_messages(scrape_results, channel_name):
     async def send_messages(text_channel):
         for scrape_result in scrape_results:
             await text_channel.send(content=f'{scrape_result.name}:')
-            for (url,
-                 screenshots) in scrape_result.url_to_screenshots_map.items():
-                if screenshots:
-                    screenshot_files = [discord.File(
-                        open(s, 'rb')) for s in screenshots]
-                    # Discord only allows 10 files per message.
-                    chunked_files = [screenshot_files[i:i + 10]
-                                     for i in
-                                     range(0, len(screenshot_files), 10)]
-                    await text_channel.send(
-                        content=f'{len(screenshots)} results from:\n{url}',
-                        files=chunked_files[0])
-                    # Send the rest of the chunks, if present.
-                    if len(chunked_files) > 1:
-                        for chunk in chunked_files[1:]:
-                            await text_channel.send(files=chunk)
-                    for f in screenshot_files:
-                        f.close()
-                else:
-                    await text_channel.send('Nothing found :(')
+            result_items = scrape_result.url_to_screenshots_map.items()
+            if result_items:
+                for url, screenshots in result_items:
+                    if screenshots:
+                        screenshot_files = [discord.File(
+                            open(s, 'rb')) for s in screenshots]
+                        # Discord only allows 10 files per message.
+                        chunked_files = [screenshot_files[i:i + 10]
+                                         for i in
+                                         range(0, len(screenshot_files), 10)]
+                        await text_channel.send(
+                            content=f'{len(screenshots)} results from:\n{url}',
+                            files=chunked_files[0])
+                        # Send the rest of the chunks, if present.
+                        if len(chunked_files) > 1:
+                            for chunk in chunked_files[1:]:
+                                await text_channel.send(files=chunk)
+                        for f in screenshot_files:
+                            f.close()
+            else:
+                await text_channel.send('Nothing found :(')
         await client.close()
 
     client.run(os.getenv(token))
