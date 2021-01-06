@@ -14,9 +14,9 @@ def send_scrape_result_messages(scrape_results, channel_name):
         print('Logged in as {0.user}'.format(client))
         text_channel = [c for c in client.get_all_channels()
                         if c.name == channel_name][0]
-        print('Purging bot messages')
+        print('Purging all bot messages')
         await delete_all_bot_messages(text_channel)
-        print('Parsing discord messages')
+        print('Sending new messages')
         await send_messages(text_channel)
 
     async def delete_all_bot_messages(text_channel):

@@ -1,6 +1,7 @@
 import os
 from collections import defaultdict
 from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -8,6 +9,7 @@ from urllib3.exceptions import MaxRetryError
 
 
 screenshots_directory_name = 'screenshots'
+
 
 class SeleniumScraper:
 
@@ -38,19 +40,21 @@ class SeleniumScraper:
             if wait_for_class is None:
                 scrape_config.item_class
             try:
-                WebDriverWait(self.driver, self.timeout_secs).until(EC.presence_of_element_located(
-                    (By.CLASS_NAME, scrape_config.wait_for_class)))
-            except:
+                WebDriverWait(self.driver, self.timeout_secs).until(
+                    EC.presence_of_element_located((
+                        By.CLASS_NAME, scrape_config.wait_for_class)))
+            except TimeoutException:
                 print('Timed out.')
                 continue
             items = self.driver.find_elements_by_class_name(
                 scrape_config.item_class)
             for item_index, item in enumerate(items):
                 print('FOUND:', item.text, '\n\n')
-                screenshot_name = f'{screenshots_directory_name}/{scrape_config.name}_{url_index}_{item_index}.png'
+                screenshot_name = f'''{screenshots_directory_name}/
+                {scrape_config.name}_{url_index}_{item_index}.png'''
                 url_to_screenshots_map[url].append(screenshot_name)
-                self.saved_screenshots.append(screenshot_name)
                 item.screenshot(screenshot_name)
+                self.saved_screenshots.append(screenshot_name)
         self.driver.quit()
         return url_to_screenshots_map
 
