@@ -33,8 +33,7 @@ class SeleniumScraper:
             try:
                 self.driver.get(url)
             except MaxRetryError as e:
-                print(f'Unable to reach: {url}')
-                print('Error:', e)
+                print(f'Unable to reach: {url}\n', e)
                 continue
             print(f'Waiting for {scrape_config.wait_for_class} to appear...')
             wait_for_class = scrape_config.wait_for_class
