@@ -32,8 +32,9 @@ class SeleniumScraper:
             print(f'\nLoading url {url_index + 1}: {url}')
             try:
                 self.driver.get(url)
-            except MaxRetryError:
+            except MaxRetryError as e:
                 print(f'Unable to reach: {url}')
+                print('Error:', e)
                 continue
             print(f'Waiting for {scrape_config.wait_for_class} to appear...')
             wait_for_class = scrape_config.wait_for_class
@@ -56,12 +57,12 @@ class SeleniumScraper:
                 url_to_screenshots_map[url].append(screenshot_name)
                 item.screenshot(screenshot_name)
                 self.saved_screenshots.append(screenshot_name)
-        self.driver.quit()
         return ScrapeResult(scrape_config.name, url_to_screenshots_map)
 
     def cleanup(self):
         for screenshot in self.saved_screenshots:
             os.remove(screenshot)
+        self.driver.quit()
 
 
 class ScrapeResult:
