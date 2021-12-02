@@ -13,7 +13,8 @@ class WebsiteScrapeConfig:
         return(self.name, self.urls, self.wait_for_class, self.item_class)
 
     def __eq__(self, other):
-        return isinstance(other, WebsiteScrapeConfig) and self.__key() == other.__key()
+        return (isinstance(other, WebsiteScrapeConfig) and
+                self.__key() == other.__key())
 
     def __hash__(self):
         return hash(self.__key())
@@ -21,7 +22,10 @@ class WebsiteScrapeConfig:
     @staticmethod
     def listFromFile(config_file_name):
         with open(config_file_name) as f:
-            json_configs = json.load(f)
+            try:
+                json_configs = json.load(f)
+            except json.decoder.JSONDecodeError:
+                raise ValueError('Config file not in proper JSON format.')
             configs = []
             for json_config in json_configs:
                 name = json_config.get("name", None)
