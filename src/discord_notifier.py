@@ -34,15 +34,18 @@ def send_scrape_result_messages(scrape_results, channel_name):
                 for url, screenshots in result_items:
                     filenames_map = convert_to_filenames(screenshots)
                     all_current = set(current_screenshots_map.keys())
+                    screenshots_set = set(filenames_map.keys())
                     new_pics = [filenames_map[f]
-                                for f in set(filenames_map.keys()).difference(
+                                for f in screenshots_set.difference(
                                 all_current)]
+                    keep_pics = screenshots_set.union(all_current)
                     print('{0.name}: {1} new items found.'.format(
                         scrape_result, len(new_pics)))
                     if new_pics:
                         for message in (current_screenshots_map[f]
                                         for f in all_current
-                                        if discord_name(scrape_result.name)
+                                        if f not in keep_pics and
+                                        discord_name(scrape_result.name)
                                         in f):
                             try:
                                 await message.delete()
