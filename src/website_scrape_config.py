@@ -40,6 +40,5 @@ class WebsiteScrapeConfig:
                 if item_class is None:
                     raise ValueError('Each scrape config needs an item_class.')
                 configs.append(WebsiteScrapeConfig(
-                    name=name, urls=urls,
-                    wait_for_class=wait_for_class, item_class=item_class))
+                    name=name, urls=urls, wait_for_class=wait_for_class, item_class=item_class))
         return configs

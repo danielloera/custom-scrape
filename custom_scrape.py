@@ -1,5 +1,5 @@
 import argparse
-import src.discord_notifier as discord_notifier
+from src.discord_notifier import send_scrape_result_messages
 from src.scraper import SeleniumScraper
 from src.website_scrape_config import WebsiteScrapeConfig
 
@@ -23,11 +23,16 @@ parser.add_argument('--discord_notification_channel', default=None,
 if __name__ == '__main__':
     args = parser.parse_args()
     configs = WebsiteScrapeConfig.listFromFile(args.config_file)
-    with SeleniumScraper(headless=args.headless,
-                         js_enabled=args.js_enabled,
-                         timeout_secs=args.timeout_secs) as scraper:
-        results = [scraper.scrape_and_screenshot_urls(config)
-                   for config in configs]
-        if args.discord_notification_channel is not None:
-            discord_notifier.send_scrape_result_messages(
-                results, args.discord_notification_channel)
+    scraper = SeleniumScraper(headless=args.headless,
+                              js_enabled=args.js_enabled,
+                              timeout_secs=args.timeout_secs)
+    results = []
+
+    for config in configs:
+        scrape_result = scraper.scrape_and_screenshot_urls(config)
+        results.append(scrape_result)
+
+    if args.discord_notification_channel is not None:
+        send_scrape_result_messages(results, args.discord_notification_channel)
+
+    scraper.cleanup()

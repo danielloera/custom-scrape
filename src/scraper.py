@@ -26,16 +26,6 @@ class SeleniumScraper:
             os.mkdir(screenshots_directory_name)
         self.saved_screenshots = []
 
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_value, tb):
-        if exc_type is not None:
-            traceback.print_exception(exc_type, exc_value, tb)
-            return False
-        self.cleanup()
-        return True
-
     def scrape_and_screenshot_urls(self, scrape_config):
         url_to_screenshots_map = defaultdict(lambda: [])
         print(f'Scraping {scrape_config.name}')
