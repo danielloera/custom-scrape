@@ -20,13 +20,5 @@
             "https://solarisjapan.com/search#q=Megurine%20Luka&page=0"],
         "wait_for_class": "grid-uniform",
         "item_class": "product-hit"
-    },
-    {
-        "name": "Amiami All Available Sonico",
-        "urls": [
-        "https://www.amiami.com/eng/search/list/?s_keywords=%E3%81%99%E3%83%BC%E3%81%B1%E3%83%BC%E3%81%9D%E3%81%AB%E5%AD%90&s_st_list_preorder_available=1&s_st_list_backorder_available=1&s_st_list_newitem_available=1&s_st_condition_flg=1",
-        "https://www.amiami.com/eng/search/list/?s_keywords=sonico&s_st_list_preorder_available=1&s_st_list_backorder_available=1&s_st_list_newitem_available=1&s_st_condition_flg=1"],
-        "wait_for_class": "new-items",
-        "item_class": "newly-added-items__item"
     }
 ]

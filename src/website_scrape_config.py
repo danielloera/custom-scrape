@@ -13,8 +13,7 @@ class WebsiteScrapeConfig:
         return(self.name, self.urls, self.wait_for_class, self.item_class)
 
     def __eq__(self, other):
-        return (isinstance(other, WebsiteScrapeConfig) and
-                self.__key() == other.__key())
+        return isinstance(other, WebsiteScrapeConfig) and self.__key() == other.__key()
 
     def __hash__(self):
         return hash(self.__key())
@@ -22,10 +21,7 @@ class WebsiteScrapeConfig:
     @staticmethod
     def listFromFile(config_file_name):
         with open(config_file_name) as f:
-            try:
-                json_configs = json.load(f)
-            except json.decoder.JSONDecodeError:
-                raise ValueError('Config file not in proper JSON format.')
+            json_configs = json.load(f)
             configs = []
             for json_config in json_configs:
                 name = json_config.get("name", None)
@@ -40,5 +36,6 @@ class WebsiteScrapeConfig:
                 if item_class is None:
                     raise ValueError('Each scrape config needs an item_class.')
                 configs.append(WebsiteScrapeConfig(
-                    name=name, urls=urls, wait_for_class=wait_for_class, item_class=item_class))
+                    name=name, urls=urls,
+                    wait_for_class=wait_for_class, item_class=item_class))
         return configs
