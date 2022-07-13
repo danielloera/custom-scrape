@@ -2,6 +2,8 @@
 screenshots/*
 !screenshots/README.md
 geckodriver.log
+cron.sh
+daniel_configs.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
