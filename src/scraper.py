@@ -14,12 +14,11 @@ screenshots_directory_name = 'screenshots'
 class SeleniumScraper:
 
     def __init__(self, headless, js_enabled, timeout_secs):
-        firefox_options = webdriver.FirefoxOptions()
+        firefox_options = webdriver.ChromeOptions()
         firefox_options.headless = headless
-        firefox_profile = webdriver.FirefoxProfile()
-        firefox_profile.set_preference("javascript.enabled", js_enabled)
-        self.driver = webdriver.Firefox(options=firefox_options,
-                                        firefox_profile=firefox_profile)
+        if js_enabled:
+            firefox_options.add_argument("--enable_javascript")
+        self.driver = webdriver.Chrome(chrome_options=firefox_options)
         self.driver.maximize_window()
         self.timeout_secs = timeout_secs
         if not os.path.isdir(screenshots_directory_name):

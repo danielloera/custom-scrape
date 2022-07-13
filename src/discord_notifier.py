@@ -18,6 +18,7 @@ def send_scrape_result_messages(scrape_results, channel_name):
         await delete_all_bot_messages(text_channel)
         print('Sending new messages')
         await send_messages(text_channel)
+        await client.close()
 
     async def delete_all_bot_messages(text_channel):
         await text_channel.purge(
@@ -47,6 +48,20 @@ def send_scrape_result_messages(scrape_results, channel_name):
                             f.close()
             else:
                 await text_channel.send('Nothing found :(')
+
+    client.run(os.getenv(token))
+
+def send_message(text, channel_name):
+    client = discord.Client()
+
+    @client.event
+    async def on_ready():        
+        text_channel = [c for c in client.get_all_channels()
+                        if c.name == channel_name][0]
+        await text_channel.purge(limit=1000)
+        await text_channel.send(content=text)
         await client.close()
 
     client.run(os.getenv(token))
+
+
