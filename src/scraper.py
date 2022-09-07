@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from urllib3.exceptions import MaxRetryError
-
+from selenium_stealth import stealth
 
 screenshots_directory_name = 'screenshots'
 
@@ -20,6 +20,14 @@ class SeleniumScraper:
             firefox_options.add_argument("--enable_javascript")
         self.driver = webdriver.Chrome(chrome_options=firefox_options)
         self.driver.maximize_window()
+        stealth(self.driver,
+                languages=["en_US", "en"],
+                vendor="Google Inc.",
+                platform="Win32",
+                webgl_vendor="Intel Inc.",
+                renderer="Intel Iris OpenGL Engine",
+                fix_hairline=True,
+                )
         self.timeout_secs = timeout_secs
         if not os.path.isdir(screenshots_directory_name):
             os.mkdir(screenshots_directory_name)
