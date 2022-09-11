@@ -33,21 +33,13 @@ def send_scrape_result_messages(scrape_results: list[ScrapeResult],
             if result_items:
                 for url, scrape_data in result_items:
                     if scrape_data:
-                        screenshot_files = [discord.File(
-                            open(s.screenshot, 'rb')) for s in scrape_data]
-                        # Discord only allows 10 files per message.
-                        chunked_files = [screenshot_files[i:i + 10]
-                                         for i in
-                                         range(0, len(screenshot_files), 10)]
                         await text_channel.send(
-                            content=f'{len(scrape_data)} results from:\n{url}',
-                            files=chunked_files[0])
-                        # Send the rest of the chunks, if present.
-                        if len(chunked_files) > 1:
-                            for chunk in chunked_files[1:]:
-                                await text_channel.send(files=chunk)
-                        for f in screenshot_files:
-                            f.close()
+                            content=f'{len(scrape_data)} results from:\n{url}')
+                        for data in scrape_data:
+                            with open(data.screenshot, 'rb') as screenshot_file:
+                                discord_file = discord.File(screenshot_file)
+                                message_url = f'{url}{data.href}' if data.href.startswith('/') else data.href
+                                await text_channel.send(content=message_url, files=[discord_file])
             else:
                 await text_channel.send('Nothing found :(')
 
