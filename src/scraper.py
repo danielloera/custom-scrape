@@ -64,8 +64,8 @@ class SeleniumScraper:
             except TimeoutException:
                 print('Timed out.')
                 continue
-            items = self.driver.find_elements_by_class_name(
-                scrape_config.item_class)
+            items = self.driver.find_elements(By.CLASS_NAME,
+                                              scrape_config.item_class)
             for item_index, item in enumerate(items):
                 print('FOUND:', item.text, '\n\n')
                 screenshot_name = (f'{screenshots_directory_name}/'

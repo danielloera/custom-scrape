@@ -7,7 +7,7 @@ max_files_per_message = 10
 
 
 def send_scrape_result_messages(scrape_results, channel_name):
-    client = discord.Client()
+    client = discord.Client(intents=discord.Intents.default())
 
     @client.event
     async def on_ready():
@@ -55,7 +55,7 @@ def send_message(text, channel_name):
     client = discord.Client()
 
     @client.event
-    async def on_ready():        
+    async def on_ready():
         text_channel = [c for c in client.get_all_channels()
                         if c.name == channel_name][0]
         await text_channel.purge(limit=1000)
