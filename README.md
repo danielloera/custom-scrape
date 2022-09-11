@@ -1,5 +1,5 @@
 # custom-scrape
-Modular/custom web scraper for screenshotting item listings using a json config.
+Custom web scraper for screenshotting item listings using a json config.
 
 ## Usage
 By default running:
@@ -30,9 +30,13 @@ This is just to label them in the final output, can be anything.
 ##### Optional
 `wait_for_class`: Needed only if you want to wait on a specific CSS class before scraping. This defaults to `item_class`.
 
-`discord_notification_channel`: The name of the discord text channel to send results to. Requires the `DISCORD_TOKEN` environment variable to be set.
-
 ## Arguments
+
+The name of the discord text channel to send results to. Requires the `DISCORD_TOKEN` environment variable to be set.
+```sh
+--discord_notification_channel general
+``` 
+
 Change the config file to use (default is `scrape_configs.json`):
 ```sh
 --config_file "some_other_file.text"
@@ -45,7 +49,11 @@ Disable javascript:
 ```sh
 --js_disabled
 ```
-Adjust how long the scraper waits for the page to load (default is 30):
+Adjust how long the scraper waits items to appear (default is 30):
 ```sh
 --timeout_secs 15
+```
+Adjust how long the scraper before searching each page (default is 3):
+```sh
+--page_wait_secs 10
 ```
