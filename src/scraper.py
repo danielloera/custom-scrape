@@ -7,13 +7,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from urllib3.exceptions import MaxRetryError
 from selenium_stealth import stealth
+import time
 
 screenshots_directory_name = 'screenshots'
 
 
 class SeleniumScraper:
 
-  def __init__(self, headless, js_enabled, timeout_secs):
+  def __init__(self, headless, js_enabled, timeout_secs, page_wait_secs):
     firefox_options = webdriver.ChromeOptions()
     firefox_options.headless = headless
     if js_enabled:
@@ -29,6 +30,7 @@ class SeleniumScraper:
             fix_hairline=True,
             )
     self.timeout_secs = timeout_secs
+    self.page_wait_secs = page_wait_secs
     if not os.path.isdir(screenshots_directory_name):
       os.mkdir(screenshots_directory_name)
     self.saved_screenshots = []
@@ -50,6 +52,7 @@ class SeleniumScraper:
       print(f'\nLoading url {url_index + 1}: {url}')
       try:
         self.driver.get(url)
+        time.sleep(self.page_wait_secs)
       except MaxRetryError as e:
         print(f'Unable to reach: {url}\n', e)
         continue
