@@ -21,18 +21,17 @@ parser.add_argument('--discord_notification_channel', default=None,
                     ''')
 
 if __name__ == '__main__':
-    args = parser.parse_args()
-    configs = WebsiteScrapeConfig.listFromFile(args.config_file)
-    try:
-        with SeleniumScraper(headless=args.headless,
-                             js_enabled=args.js_enabled,
-                             timeout_secs=args.timeout_secs) as scraper:
-            results = [scraper.scrape_and_screenshot_urls(config)
-                       for config in configs]
-            if args.discord_notification_channel is not None:
-                discord_notifier.send_scrape_result_messages(
-                    results, args.discord_notification_channel)
-    except Exception as err:
-        print(f'Error oh noes!:\n{err}')
-        discord_notifier.send_message(f'Scrape failed:\n{err}', args.discord_notification_channel)
-
+  args = parser.parse_args()
+  configs = WebsiteScrapeConfig.listFromFile(args.config_file)
+  try:
+    with SeleniumScraper(headless=args.headless,
+                         js_enabled=args.js_enabled,
+                         timeout_secs=args.timeout_secs) as scraper:
+      results = [scraper.scrape_and_screenshot_urls(config)
+                 for config in configs]
+      if args.discord_notification_channel is not None:
+        discord_notifier.send_scrape_result_messages(
+            results, args.discord_notification_channel)
+  except Exception as err:
+    print(f'Error oh noes!:\n{err}')
+    discord_notifier.send_message(f'Scrape failed:\n{err}', args.discord_notification_channel)
