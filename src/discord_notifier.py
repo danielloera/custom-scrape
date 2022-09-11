@@ -1,12 +1,14 @@
 import asyncio
 import discord
 import os
+from src.scraper import ScrapeResult
 
 token = "DISCORD_TOKEN"
 max_files_per_message = 10
 
 
-def send_scrape_result_messages(scrape_results, channel_name):
+def send_scrape_result_messages(scrape_results: list[ScrapeResult],
+                                channel_name: str):
     client = discord.Client(intents=discord.Intents.default())
 
     @client.event
@@ -27,18 +29,18 @@ def send_scrape_result_messages(scrape_results, channel_name):
     async def send_messages(text_channel):
         for scrape_result in scrape_results:
             await text_channel.send(content=f'{scrape_result.name}:')
-            result_items = scrape_result.url_to_screenshots_map.items()
+            result_items = scrape_result.url_to_scrape_data_map.items()
             if result_items:
-                for url, screenshots in result_items:
-                    if screenshots:
+                for url, scrape_data in result_items:
+                    if scrape_data:
                         screenshot_files = [discord.File(
-                            open(s, 'rb')) for s in screenshots]
+                            open(s.screenshot, 'rb')) for s in scrape_data]
                         # Discord only allows 10 files per message.
                         chunked_files = [screenshot_files[i:i + 10]
                                          for i in
                                          range(0, len(screenshot_files), 10)]
                         await text_channel.send(
-                            content=f'{len(screenshots)} results from:\n{url}',
+                            content=f'{len(scrape_data)} results from:\n{url}',
                             files=chunked_files[0])
                         # Send the rest of the chunks, if present.
                         if len(chunked_files) > 1:
@@ -50,6 +52,7 @@ def send_scrape_result_messages(scrape_results, channel_name):
                 await text_channel.send('Nothing found :(')
 
     client.run(os.getenv(token))
+
 
 def send_message(text, channel_name):
     client = discord.Client()
@@ -63,5 +66,3 @@ def send_message(text, channel_name):
         await client.close()
 
     client.run(os.getenv(token))
-
-

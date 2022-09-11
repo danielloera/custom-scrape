@@ -44,7 +44,7 @@ class SeleniumScraper:
         return True
 
     def scrape_and_screenshot_urls(self, scrape_config):
-        url_to_screenshots_map = defaultdict(lambda: [])
+        url_to_scrape_data_map = defaultdict(lambda: [])
         print(f'Scraping {scrape_config.name}')
         for url_index, url in enumerate(scrape_config.urls):
             print(f'\nLoading url {url_index + 1}: {url}')
@@ -58,8 +58,9 @@ class SeleniumScraper:
             if wait_for_class is None:
                 scrape_config.item_class
             try:
-                WebDriverWait(self.driver, self.timeout_secs).until(lambda driver: self.driver.execute_script(
-                    'return document.readyState') == 'complete')
+                WebDriverWait(self.driver, self.timeout_secs).until(
+                    lambda driver: self.driver.execute_script(
+                        'return document.readyState') == 'complete')
                 WebDriverWait(self.driver, self.timeout_secs).until(
                     EC.presence_of_element_located((
                         By.CLASS_NAME, scrape_config.wait_for_class)))
@@ -73,10 +74,17 @@ class SeleniumScraper:
                 screenshot_name = (f'{screenshots_directory_name}/'
                                    f'{scrape_config.name}_'
                                    f'{url_index}_{item_index}.png')
-                url_to_screenshots_map[url].append(screenshot_name)
+                first_href = self.get_first_href(item)
+                url_to_scrape_data_map[url].append(
+                    ScrapeData(screenshot_name, first_href))
                 item.screenshot(screenshot_name)
                 self.saved_screenshots.append(screenshot_name)
-        return ScrapeResult(scrape_config.name, url_to_screenshots_map)
+        return ScrapeResult(scrape_config.name, url_to_scrape_data_map)
+
+    def get_first_href(self, element):
+        a_tag = element.find_element(By.TAG_NAME, 'a')
+        if a_tag != None:
+            return a_tag.get_attribute('href')
 
     def cleanup(self):
         for screenshot in self.saved_screenshots:
@@ -86,6 +94,13 @@ class SeleniumScraper:
 
 class ScrapeResult:
 
-    def __init__(self, name, url_to_screenshots_map):
+    def __init__(self, name, url_to_scrape_data_map):
         self.name = name
-        self.url_to_screenshots_map = url_to_screenshots_map
+        self.url_to_scrape_data_map = url_to_scrape_data_map
+
+
+class ScrapeData:
+
+    def __init__(self, screenshot, href):
+        self.screenshot = screenshot
+        self.href = href
