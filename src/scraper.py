@@ -58,6 +58,8 @@ class SeleniumScraper:
             if wait_for_class is None:
                 scrape_config.item_class
             try:
+                WebDriverWait(self.driver, self.timeout_secs).until(lambda driver: self.driver.execute_script(
+                    'return document.readyState') == 'complete')
                 WebDriverWait(self.driver, self.timeout_secs).until(
                     EC.presence_of_element_located((
                         By.CLASS_NAME, scrape_config.wait_for_class)))
