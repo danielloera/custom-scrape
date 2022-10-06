@@ -101,9 +101,33 @@ class ScrapeResult:
     self.name = name
     self.url_to_scrape_data_map = url_to_scrape_data_map
 
+  def __str__(self):
+    return f'{{{self.name}: {str(sorted(self.url_to_scrape_data_map.values()))}}}'
+
+  def __repr__(self):
+    return self.__str__()
+
+  def __eq__(self, other):
+    return self.name == other.name
+
+  def __lt__(self, other):
+    return self.name < other.name
+
 
 class ScrapeData:
 
   def __init__(self, screenshot, href):
     self.screenshot = screenshot
     self.href = href
+
+  def __str__(self):
+    return self.href
+
+  def __repr__(self):
+    return self.__str__()
+
+  def __eq__(self, other):
+    return self.href == other.href
+
+  def __lt__(self, other):
+    return self.href < other.href

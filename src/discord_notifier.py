@@ -5,10 +5,12 @@ from src.scraper import ScrapeResult
 
 token = "DISCORD_TOKEN"
 max_files_per_message = 10
-
+scrape_results_log = "scrape_results.log"
+no_changes_message = "No new results were found."
 
 def send_scrape_result_messages(scrape_results: list[ScrapeResult],
-                                channel_name: str):
+                                channel_name: str,
+                                notify_on_changes: bool):
   client = discord.Client(intents=discord.Intents.default())
 
   @client.event
@@ -16,11 +18,37 @@ def send_scrape_result_messages(scrape_results: list[ScrapeResult],
     print('Logged in as {0.user}'.format(client))
     text_channel = [c for c in client.get_all_channels()
                     if c.name == channel_name][0]
-    print('Purging all bot messages')
-    await delete_all_bot_messages(text_channel)
-    print('Sending new messages')
-    await send_messages(text_channel)
+    changes_detected = new_changes_detected()
+    if not notify_on_changes or changes_detected:
+      print('Purging all bot messages')
+      await delete_all_bot_messages(text_channel)
+      print('Sending new messages')
+      await send_messages(text_channel)
+
+    if notify_on_changes and not changes_detected:
+      print('No changes found.')
+      async for msg in text_channel.history(limit=1000):
+        if msg.content == no_changes_message:
+          await msg.delete()
+      await text_channel.send(content=no_changes_message)
+
     await client.close()
+
+  def new_changes_detected():
+    current_changes_key = str(sorted(scrape_results))
+    if not os.path.isfile(scrape_results_log):
+      with open(scrape_results_log, 'w') as log:
+        print("Creating results log.")
+        log.write(current_changes_key)
+      return True
+
+    with open(scrape_results_log, 'r+') as log:
+      existing_key = log.read()
+      if existing_key != current_changes_key:
+        print('New changes found.')
+        log.write(current_changes_key)
+        return True
+      return False
 
   async def delete_all_bot_messages(text_channel):
     await text_channel.purge(

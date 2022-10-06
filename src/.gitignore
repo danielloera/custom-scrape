@@ -2,6 +2,7 @@
 screenshots/*
 !screenshots/README.md
 geckodriver.log
+scrape_results.log
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

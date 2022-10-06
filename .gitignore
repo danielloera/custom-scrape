@@ -4,6 +4,7 @@ screenshots/*
 geckodriver.log
 cron.sh
 daniel_configs.json
+scrape_results.log
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

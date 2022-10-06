@@ -22,6 +22,10 @@ parser.add_argument('--discord_notification_channel', default=None,
                     help='''The discord text channel name to send results to.
                     Requires the DISCORD_TOKEN environment variable to be set.
                     ''')
+parser.add_argument('--notify_on_changes', action='store_true',
+                    help='''Only notifies on changes to items.
+                    Will store a file locally to keep track.''')
+parser.set_defaults(notify_on_changes=False)
 
 if __name__ == '__main__':
   args = parser.parse_args()
@@ -35,7 +39,7 @@ if __name__ == '__main__':
                  for config in configs]
       if args.discord_notification_channel is not None:
         discord_notifier.send_scrape_result_messages(
-            results, args.discord_notification_channel)
+            results, args.discord_notification_channel, args.notify_on_changes)
   except Exception as err:
     print(f'Error oh noes!:\n{err}')
     discord_notifier.send_message(f'Scrape failed:\n{err}', args.discord_notification_channel)
